@@ -115,16 +115,14 @@ func (h ProtectedHeader) SetType(typ any) (any, error) {
 
 // SetCWTClaims sets the CWT Claims value of the protected header.
 func (h ProtectedHeader) SetCWTClaims(claims CWTClaims) (CWTClaims, error) {
-	for name, _ := range claims {
+	for name, value := range claims {
 		switch name {
-		case 1:
-			iss, hasIss := claims[name]
-			if hasIss && !canTstr(iss) {
+		case CWTClaimIssuer:
+			if !canTstr(value) {
 				return claims, errors.New("cwt claim: iss: require tstr")
 			}
-		case 2:
-			sub, hasSub := claims[name]
-			if hasSub && !canTstr(sub) {
+		case CWTClaimSubject:
+			if !canTstr(value) {
 				return claims, errors.New("cwt claim: sub: require tstr")
 			}
 		case 3:
